@@ -1,16 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-)
+import "net/http"
 
 func main() {
-	http.HandleFunc("/", HandleIndex)
-	log.Println(http.ListenAndServe(":8000", nil))
-}
-
-func HandleIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, world!")
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("."))))
+	http.ListenAndServe(":8000", nil)
 }
